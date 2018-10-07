@@ -8,8 +8,7 @@ node('docker') {
     archive 'target/*.jar'
   }
   stage('Static Code Analysis'){
-    sh 'mvn clean verify sonar:sonar -Dsonar.projectName=example-project
-    -Dsonar.projectKey=example-project -Dsonar.projectVersion=$BUILD_NUMBER';
+    sh 'mvn clean verify sonar:sonar -Dsonar.host.url=http://jenkins-master:9000 -Dsonar.projectName=example-project -Dsonar.projectKey=example-project -Dsonar.projectVersion=$BUILD_NUMBER';
   }
   stage ('Integration Test'){
     sh 'mvn clean verify -Dsurefire.skip=true';
@@ -51,7 +50,7 @@ node('docker_pt') {
     withCredentials([usernameColonPassword(credentialsId:
       'artifactory-account', variable: 'credentials')]) {
         sh 'curl -u${credentials} -X PUT
-        "http://172.17.8.108:8081/artifactory/api/storage/example-project/
+        "http://jenkins-master:8081/artifactory/api/storage/example-project/
         ${BUILD_NUMBER}/hello-0.0.1.war?properties=Performance-Tested=Yes"';
       }
   }
