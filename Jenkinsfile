@@ -49,9 +49,7 @@ node('docker_pt') {
   stage ('Promote build in Artifactory'){
     withCredentials([usernameColonPassword(credentialsId:
       'artifactory-account', variable: 'credentials')]) {
-        sh 'curl -u${credentials} -X PUT
-        "http://jenkins-master:8081/artifactory/api/storage/example-project/
-        ${BUILD_NUMBER}/hello-0.0.1.war?properties=Performance-Tested=Yes"';
+        sh 'curl -u${credentials} -X PUT "http://jenkins-master:8081/artifactory/api/storage/example-project/ ${BUILD_NUMBER}/hello-0.0.1.war?properties=Performance-Tested=Yes"';
       }
   }
 }
